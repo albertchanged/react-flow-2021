@@ -1,22 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import TodoList from "./TodoList";
 
 function App() {
+  const [newTodo, setNewTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+
+  const updateCurrentTodo = (e) => {
+    e.preventDefault();
+    setNewTodo(e.target.value);
+  }
+
+  const submitTodo = (e) => {
+    if (e.key === "Enter") {
+      setTodos(todos.concat(newTodo));
+      setNewTodo("");
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h2>Tasks for the Day</h2>
+        <input
+          type="text"
+          value={newTodo}
+          placeholder="Type your task"
+          onChange={updateCurrentTodo}
+          onKeyPress={submitTodo}
+        />
+        <TodoList todos={todos} />
       </header>
     </div>
   );
