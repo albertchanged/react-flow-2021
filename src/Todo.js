@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+// @flow
+import * as React from "react";
 
-function Todo({todo}) {
-  const [completed, setCompleted] = useState(false);
+type Props = {
+  todo: string
+};
 
-  const toggleCompleted = () => {
+function Todo(props: Props): React.Node {
+  const {todo} = props;
+  const [completed, setCompleted] = React.useState(false);
+
+  const toggleCompleted = (): void => {
     setCompleted(!completed);
   }
 
