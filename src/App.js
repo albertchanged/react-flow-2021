@@ -1,38 +1,58 @@
+// @flow
 import './App.css';
-import { useState } from 'react';
+import * as React from "react";
 import TodoList from "./TodoList";
 
-function App() {
-  const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+type State = {
+  newTodo: string,
+  todos: string[]
+};
 
-  const updateCurrentTodo = (e) => {
+class App extends React.Component<{}, State> {
+  state: State = {
+    newTodo: "",
+    todos: []
+  };
+
+  // Typing for class method based on https://stackoverflow.com/a/65084912
+  updateCurrentTodo: SyntheticKeyboardEvent<HTMLInputElement> => void = (e) => {
     e.preventDefault();
-    setNewTodo(e.target.value);
-  }
 
-  const submitTodo = (e) => {
-    if (e.key === "Enter") {
-      setTodos(todos.concat(newTodo));
-      setNewTodo("");
+    if (e.target instanceof HTMLInputElement) {
+      this.setState({
+        newTodo: e.target.value
+      });
     }
   }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Tasks for the Day</h2>
-        <input
-          type="text"
-          value={newTodo}
-          placeholder="Type your task"
-          onChange={updateCurrentTodo}
-          onKeyPress={submitTodo}
-        />
-        <TodoList todos={todos} />
-      </header>
-    </div>
-  );
+  submitTodo: SyntheticKeyboardEvent<HTMLInputElement> => void = (e) => {
+    const newTodo = this.state.newTodo;
+    if (e.key === "Enter") {
+      this.setState({
+        todos: this.state.todos.concat(newTodo),
+        newTodo: ""
+      });
+    }
+  }
+
+  render(): React.Node {
+    const {newTodo, todos} = this.state;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h2>Tasks for the Day</h2>
+          <input
+            type="text"
+            value={newTodo}
+            placeholder="Type your task"
+            onChange={this.updateCurrentTodo}
+            onKeyPress={this.submitTodo}
+          />
+          <TodoList todos={todos} />
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
